@@ -1,74 +1,79 @@
 declare type Prettify<T> = {
-	[K in keyof T]: T[K];
+  [K in keyof T]: T[K];
 } & {};
 
 declare interface Hadith {
-	id: number;
-	idInBook: number;
-	arabic: string;
-	english: {
-		narrator: string;
-		text: string;
-	};
-	chapterId: number;
-	bookId: number;
+  id: number;
+  idInBook: number;
+  arabic: string;
+  english: {
+    narrator: string;
+    text: string;
+  };
+  chapterId: number;
+  bookId: number;
+  reference: {
+    text: string;
+    href: string;
+  };
+  grade: string | null;
 }
 
 interface Introduction {
-	arabic: string;
-	english: string;
+  arabic: string;
+  english: string;
 }
 
 interface Chapter {
-	id: number;
-	bookId: number;
-	arabic: string;
-	english: string;
+  id: number;
+  bookId: number;
+  arabic: string;
+  english: string;
 }
 
 interface BookInfo {
-	title: string;
-	author: string;
-	introduction: string | undefined;
+  title: string;
+  author: string;
+  introduction: string | undefined;
 }
 
 interface Metadata {
-	length: number;
-	arabic: Prettify<BookInfo>;
-	english: Prettify<BookInfo>;
+  length: number;
+  arabic: Prettify<BookInfo>;
+  english: Prettify<BookInfo>;
 }
 
 interface ChapterFile {
-	metadata: Prettify<Metadata>;
-	hadiths: Hadith[];
-	chapter: Chapter | undefined;
+  metadata: Prettify<Metadata>;
+  hadiths: Hadith[];
+  chapter: Chapter | undefined;
 }
 
 interface BookMetadata extends Metadata {
-	id: number;
+  id: number;
 }
 
 interface BookFile {
-	id: number;
-	metadata: Prettify<BookMetadata>;
-	chapters: Chapter[];
-	hadiths: Hadith[];
+  id: number;
+  metadata: Prettify<BookMetadata>;
+  chapters: Chapter[];
+  hadiths: Hadith[];
 }
 
 interface ScrapedBook {
-	id: number;
-	arabic: {
-		title: string;
-		author: string;
-	};
-	english: {
-		title: string;
-		author: string;
-	};
-	length?: number;
-	path: string[];
-	route: {
-		base: string;
-		chapters: string[];
-	};
+  id: number;
+  arabic: {
+    title: string;
+    author: string;
+  };
+  english: {
+    title: string;
+    author: string;
+  };
+  length?: number;
+  path: string[];
+  route: {
+    base: string;
+    chapters: string[];
+  };
 }
