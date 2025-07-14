@@ -2,6 +2,17 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 
 export async function scrapeData(route: string, bookId: number) {
+  //* Helper function to clean text from various whitespace characters
+  const cleanText = (text: string): string => {
+    return text
+      .trim()
+      .replace(/&nbsp;/g, "")  // HTML non-breaking space
+      .replace(/\xa0/g, "")     // Unicode non-breaking space
+      .replace(/\u00A0/g, "")   // Another Unicode non-breaking space
+      .replace(/\s+/g, " ")     // Replace multiple whitespace with single space
+      .trim();                  // Final trim
+  };
+
   //* GET HTML content
   const data = await axios
     .get(`https://sunnah.com/${route}`, {
@@ -114,7 +125,7 @@ export async function scrapeData(route: string, bookId: number) {
       // First try to get the second english_grade td
       const englishGradeTds = gradeTable.find("td.english_grade");
       if (englishGradeTds.length >= 2) {
-        const secondEnglishGrade = englishGradeTds.eq(1).text().trim().replace(/&nbsp;/g, "");
+        const secondEnglishGrade = cleanText(englishGradeTds.eq(1).text());
         if (secondEnglishGrade) {
           gradeText = secondEnglishGrade;
         }
@@ -124,7 +135,7 @@ export async function scrapeData(route: string, bookId: number) {
       if (!gradeText) {
         const arabicGradeTds = gradeTable.find("td.arabic_grade");
         if (arabicGradeTds.length > 0) {
-          const firstArabicGrade = arabicGradeTds.eq(0).text().trim().replace(/&nbsp;/g, "");
+          const firstArabicGrade = cleanText(arabicGradeTds.eq(0).text());
           if (firstArabicGrade) {
             gradeText = firstArabicGrade;
           }
