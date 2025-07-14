@@ -111,21 +111,23 @@ export async function scrapeData(route: string, bookId: number) {
     let gradeText: string | null = null;
 
     if (gradeTable.length > 0) {
-      // Find the td with "Grade" text
-      const gradeTd = gradeTable
-        .find("td")
-        .filter(function (this: cheerio.Element) {
-          return $(this).text().includes("Grade");
-        });
+      // First try to get the second english_grade td
+      const englishGradeTds = gradeTable.find("td.english_grade");
+      if (englishGradeTds.length >= 2) {
+        const secondEnglishGrade = englishGradeTds.eq(1).text().trim().replace(/&nbsp;/g, "");
+        if (secondEnglishGrade) {
+          gradeText = secondEnglishGrade;
+        }
+      }
 
-      if (gradeTd.length > 0) {
-        // Get the next td which should contain the grade
-        const nextTd = gradeTd.next("td");
-        if (nextTd.length > 0) {
-          gradeText = nextTd
-            .text()
-            .trim()
-            .replace(/&nbsp;/g, "");
+      // If no value in second english_grade, try first arabic_grade
+      if (!gradeText) {
+        const arabicGradeTds = gradeTable.find("td.arabic_grade");
+        if (arabicGradeTds.length > 0) {
+          const firstArabicGrade = arabicGradeTds.eq(0).text().trim().replace(/&nbsp;/g, "");
+          if (firstArabicGrade) {
+            gradeText = firstArabicGrade;
+          }
         }
       }
     }
