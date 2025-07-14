@@ -10,26 +10,26 @@ import nodePath from "node:path";
  * @param data Data to be written to file
  */
 async function createFile(
-	mainDir: string[],
-	path: string[],
-	fileName: string,
-	data: unknown,
+  mainDir: string[],
+  path: string[],
+  fileName: string,
+  data: unknown
 ) {
-	const resolvedPath = nodePath.join(
-		process.cwd(),
-		...mainDir,
-		...path,
-		`${fileName}.json`,
-	);
-	const textContent = JSON.stringify(data);
-	// const textContent = JSON.stringify(data, null, 2); //? For pretty JSON
+  const resolvedPath = nodePath.join(
+    process.cwd(),
+    ...mainDir,
+    ...path,
+    `${fileName}.json`
+  );
+  // const textContent = JSON.stringify(data);
+  const textContent = JSON.stringify(data, null, 2); //? For pretty JSON
 
-	// Exit if file already exists
-	// if (existsSync(resolvedPath)) return
+  // Exit if file already exists
+  // if (existsSync(resolvedPath)) return
 
-	// Write content to file
-	await writeFile(resolvedPath, textContent);
-	// console.info(`File "${path.join("/")}/${fileName}.json" created!`)
+  // Write content to file
+  await writeFile(resolvedPath, textContent);
+  // console.info(`File "${path.join("/")}/${fileName}.json" created!`)
 }
 
 export default createFile;

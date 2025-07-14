@@ -80,7 +80,7 @@ async function createChaptersFiles() {
             "db",
             "by_chapter",
             ...book.path,
-            `${index + 1}.json`
+            `${chapter}.json`
           )
         )
       ) {
@@ -114,7 +114,6 @@ async function createBooksFromChapters() {
   let GENERAL_ID = 1;
 
   for (const book of books) {
-    let idInBook = 1;
     //* Create Progress Bar
     const bar = new SingleBar(
       {
@@ -193,7 +192,6 @@ async function createBooksFromChapters() {
         ...chapterData.hadiths.map((hadith: Prettify<Hadith>) => ({
           ...hadith,
           id: GENERAL_ID++,
-          idInBook: idInBook++,
           bookId: book.id,
           chapterId: chapterId,
         }))

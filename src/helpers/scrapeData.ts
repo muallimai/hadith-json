@@ -2,7 +2,6 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 
 export async function scrapeData(route: string, bookId: number) {
-  console;
   //* GET HTML content
   const data = await axios
     .get(`https://sunnah.com/${route}`, {
@@ -50,8 +49,22 @@ export async function scrapeData(route: string, bookId: number) {
   allHadiths.each((i, el) => {
     // Extract reference information
     const referenceTable = $(el).find(".hadith_reference");
-    let referenceText = "";
-    let referenceHref = "";
+    let referenceText: string | undefined = undefined;
+    let referenceHref: string | undefined = undefined;
+
+    // Helper function to extract reference from share link
+    const extractShareLinkReference = () => {
+      const shareLink = $(el).find(".sharelink");
+      if (shareLink.length > 0) {
+        const onclick = shareLink.attr("onclick");
+        if (onclick) {
+          const urlMatch = onclick.match(/share\(this,\s*'([^']+)'\)/);
+          if (urlMatch && urlMatch[1]) {
+            referenceHref = `https://sunnah.com${urlMatch[1]}`;
+          }
+        }
+      }
+    };
 
     if (referenceTable.length > 0) {
       // Find the row with "Reference" text
@@ -62,15 +75,34 @@ export async function scrapeData(route: string, bookId: number) {
         });
 
       if (referenceRow.length > 0) {
-        // Get the next td which should contain the anchor
+        // Get the next td which should contain the reference
         const nextTd = referenceRow.next("td");
-        const anchor = nextTd.find("a");
 
-        if (anchor.length > 0) {
-          referenceText = anchor.text().trim();
-          const href = anchor.attr("href") || "";
-          referenceHref = `https://sunnah.com${href}`;
+        if (nextTd.length > 0) {
+          // First check if there's an anchor tag
+          const anchor = nextTd.find("a");
+
+          if (anchor.length > 0) {
+            // If anchor exists, use it
+            referenceText = anchor.text().trim();
+            const href = anchor.attr("href") || "";
+            referenceHref = `https://sunnah.com${href}`;
+          } else {
+            // If no anchor, check if we can find the URL in the share link
+            extractShareLinkReference();
+
+            referenceText = nextTd.text().trim();
+            if (
+              referenceText.startsWith(": ") ||
+              referenceText.startsWith(":\u00A0")
+            ) {
+              referenceText = referenceText.substring(2);
+            }
+          }
         }
+      } else {
+        // No reference row found, try to get reference from share link
+        extractShareLinkReference();
       }
     }
 
@@ -100,7 +132,6 @@ export async function scrapeData(route: string, bookId: number) {
 
     const text = {
       id: i + 1,
-      idInBook: i + 1,
       chapterId: +chapterInfo.id,
       bookId,
       arabic: $(el)

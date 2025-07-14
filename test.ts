@@ -4,7 +4,7 @@ async function testScrapeData() {
   console.log("🚀 Starting scrapeData test...\n");
 
   // Test with a simple route - using Bukhari chapter 1
-  const testRoute = "bukhari/1";
+  const testRoute = "mishkat/30";
   const testBookId = 1;
 
   console.log(`📖 Testing route: ${testRoute}`);
@@ -34,7 +34,6 @@ async function testScrapeData() {
       console.log("📜 FIRST HADITH EXAMPLE:");
       const firstHadith = result.hadiths[0];
       console.log(`   ID: ${firstHadith.id}`);
-      console.log(`   ID in Book: ${firstHadith.idInBook}`);
       console.log(`   Chapter ID: ${firstHadith.chapterId}`);
       console.log(`   Book ID: ${firstHadith.bookId}`);
       console.log(`   Arabic: ${firstHadith.arabic.substring(0, 100)}...`);
@@ -43,16 +42,14 @@ async function testScrapeData() {
         `   English Text: ${firstHadith.english.text.substring(0, 100)}...`
       );
       console.log(`   Reference: ${firstHadith.reference.text}`);
-      console.log(`   Reference Link: ${firstHadith.reference.href}\n`);
-      console.log(`   Grade: ${firstHadith.grade || "N/A"}`);
+      console.log(`   Reference Link: ${firstHadith.reference.href}`);
+      console.log(`   Grade: ${firstHadith.grade || "N/A"}\n`);
     }
 
     // Display all hadiths count by ID
     console.log("📝 ALL HADITHS IDS:");
     result.hadiths.forEach((hadith, index) => {
-      console.log(
-        `   ${index + 1}. ID: ${hadith.id}, Book ID: ${hadith.idInBook}`
-      );
+      console.log(`   ${index + 1}. ID: ${hadith.id}`);
     });
 
     console.log("\n🎉 Test completed successfully!");

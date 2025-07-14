@@ -4,7 +4,6 @@ declare type Prettify<T> = {
 
 declare interface Hadith {
   id: number;
-  idInBook: number;
   arabic: string;
   english: {
     narrator: string;
@@ -13,8 +12,8 @@ declare interface Hadith {
   chapterId: number;
   bookId: number;
   reference: {
-    text: string;
-    href: string;
+    text?: string;
+    href?: string;
   };
   grade: string | null;
 }
@@ -33,7 +32,7 @@ interface Chapter {
 
 interface BookInfo {
   title: string;
-  author: string;
+  author: string | undefined;
   introduction: string | undefined;
 }
 
@@ -64,11 +63,11 @@ interface ScrapedBook {
   id: number;
   arabic: {
     title: string;
-    author: string;
+    author?: string;
   };
   english: {
     title: string;
-    author: string;
+    author?: string;
   };
   length?: number;
   path: string[];
