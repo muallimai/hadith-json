@@ -42,7 +42,7 @@ async function testScrapeData() {
         `   English Text: ${firstHadith.english.text.substring(0, 100)}...`
       );
       console.log(`   Reference: ${firstHadith.reference.text}`);
-      console.log(`   Reference Link: ${firstHadith.reference.href}`);
+      console.log(`   Reference Link: ${firstHadith.reference.url}`);
       console.log(`   Grade: ${firstHadith.grade || "N/A"}\n`);
     }
 

@@ -153,7 +153,7 @@ export async function scrapeData(route: string, bookId: number) {
       },
       reference: {
         text: referenceText,
-        href: referenceHref,
+        url: referenceHref,
       },
       grade: gradeText,
     };

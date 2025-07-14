@@ -13,7 +13,7 @@ declare interface Hadith {
   bookId: number;
   reference: {
     text?: string;
-    href?: string;
+    url?: string;
   };
   grade: string | null;
 }
